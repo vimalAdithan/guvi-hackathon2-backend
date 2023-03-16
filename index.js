@@ -3,6 +3,7 @@ dotenv.config();
 // const express = require("express");
 import express from "express";
 import { MongoClient } from "mongodb";
+import cors from "cors";
 const app = express();
 const MONGO_URL=process.env.MONGO_URL;
 const PORT = process.env.PORT;
@@ -14,6 +15,7 @@ const client = new MongoClient(MONGO_URL); // dial
 await client.connect(); // call
 console.log("Mongo is connected !!!  ");
 
+app.use(cors());
 // const cart=[
 //   {
 //     "id": "1",
@@ -61,6 +63,14 @@ console.log("Mongo is connected !!!  ");
 //     .toArray();
 //   response.send(cart);
 // });
+app.get("/", async function (request, response) {
+  const cart = await client
+    .db("rental")
+    .collection("cart")
+    .find({})
+    .toArray();
+  response.send(cart);
+});
 
 app.get("/cart", async function (request, response) {
   const cart = await client
