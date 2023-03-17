@@ -1,4 +1,4 @@
-import * as dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+import * as dotenv from "dotenv"; 
 dotenv.config();
 // const express = require("express");
 import express from "express";
@@ -7,7 +7,7 @@ import cors from "cors";
 const app = express();
 const MONGO_URL=process.env.MONGO_URL;
 const PORT = process.env.PORT;
-// const PORT=4000;
+// const PORT = 4000;
 // const MONGO_URL = "mongodb://127.0.0.1";
 
 const client = new MongoClient(MONGO_URL); // dial
@@ -64,39 +64,37 @@ app.use(cors());
 //   response.send(cart);
 // });
 app.get("/", async function (request, response) {
+  const cart = await client.db("rental").collection("cart").find({}).toArray();
+  response.send(cart);
+});
+
+app.get("/available", async function (request, response) {
   const cart = await client
     .db("rental")
     .collection("cart")
-    .find({})
+    .find({ status: true })
     .toArray();
   response.send(cart);
 });
 
 app.get("/cart", async function (request, response) {
-  const cart = await client
-    .db("rental")
-    .collection("cart")
-    .find({})
-    .toArray();
+  const cart = await client.db("rental").collection("cart").find({}).toArray();
   response.send(cart);
 });
 
 app.get("/cart/:id", async function (request, response) {
   const { id } = request.params;
-  const cart = await client
-    .db("rental")
-    .collection("cart")
-    .findOne({ id: id });
-cart
+  const cart = await client.db("rental").collection("cart").findOne({ id: id });
+  cart
     ? response.send(cart)
     : response.status(404).send({ message: "item not found" });
 });
 
-app.post("/cart", express.json(), async function (request, response) {
-  const data = request.body;
-  const result = await client.db("rental").collection("cart").insertMany(data);
-  response.send(result);
-});
+// app.post("/cart", express.json(), async function (request, response) {
+//   const data = request.body;
+//   const result = await client.db("rental").collection("cart").insertMany(data);
+//   response.send(result);
+// });
 
 // app.delete("/cart/:id", async function (request, response) {
 //   const { id } = request.params;
@@ -104,18 +102,18 @@ app.post("/cart", express.json(), async function (request, response) {
 //     .db("rental")
 //     .collection("cart")
 //     .deleteOne({ id: id });
-//   result.deleteCount>=1
+//   result.deletedCount>=1
 //     ? response.send({message:"item has successfully deleted"})
 //     : response.status(404).send({ message: "item not found" });
 // });
 
-app.put("/cart/:id",express.json(), async function (request, response) {
+app.put("/cart/:id", express.json(), async function (request, response) {
   const { id } = request.params;
   const data = request.body;
   const result = await client
     .db("rental")
     .collection("cart")
-    .updateOne({ id: id },{$set:data});
-    response.send(result)
+    .updateOne({ id: id }, { $set: data });
+  response.send(result);
 });
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
