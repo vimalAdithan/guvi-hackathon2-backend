@@ -15,10 +15,10 @@ const client = new MongoClient(MONGO_URL); // dial
 // Top level await
 await client.connect(); // call
 console.log("Mongo is connected !!!  ");
-app.use((request,response,next)=>{response.header('access-Control-Allow-Origin','*')
-response.header('access-Control-Allow-Method','*')
-response.header('access-Control-Allow-Headers','*')
-next()})
+// app.use((request,response,next)=>{response.header('access-Control-Allow-Origin','*')
+// response.header('access-Control-Allow-Method','*')
+// response.header('access-Control-Allow-Headers','*')
+// next()})
 // const cart=[
 //   {
 //     "id": "1",
@@ -97,6 +97,9 @@ app.get("/cart/:id", async function (request, response) {
 app.post("/add", express.json(), async function (request, response) {
   const data = request.body;
   const result = await client.db("rental").collection("cart").insertMany(data);
+  response.header('access-Control-Allow-Origin','*')
+response.header('access-Control-Allow-Method','*')
+response.header('access-Control-Allow-Headers','*')
   response.send(result);
 });
 
