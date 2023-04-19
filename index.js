@@ -90,22 +90,22 @@ app.get("/cart/:id", async function (request, response) {
     : response.status(404).send({ message: "item not found" });
 });
 
-// app.post("/cart", express.json(), async function (request, response) {
-//   const data = request.body;
-//   const result = await client.db("rental").collection("cart").insertMany(data);
-//   response.send(result);
-// });
+app.post("/add", express.json(), async function (request, response) {
+  const data = request.body;
+  const result = await client.db("rental").collection("cart").insertMany(data);
+  response.send(result);
+});
 
-// app.delete("/cart/:id", async function (request, response) {
-//   const { id } = request.params;
-//   const result = await client
-//     .db("rental")
-//     .collection("cart")
-//     .deleteOne({ id: id });
-//   result.deletedCount>=1
-//     ? response.send({message:"item has successfully deleted"})
-//     : response.status(404).send({ message: "item not found" });
-// });
+app.delete("/cart/:id", async function (request, response) {
+  const { id } = request.params;
+  const result = await client
+    .db("rental")
+    .collection("cart")
+    .deleteOne({ id: id });
+  result.deletedCount>=1
+    ? response.send({message:"item has successfully deleted"})
+    : response.status(404).send({ message: "item not found" });
+});
 
 app.put("/cart/:id", express.json(), async function (request, response) {
   const { id } = request.params;
