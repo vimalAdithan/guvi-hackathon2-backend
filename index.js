@@ -2,13 +2,13 @@ import * as dotenv from "dotenv";
 dotenv.config();
 // const express = require("express");
 import express from "express";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 const app = express();
-const MONGO_URL=process.env.MONGO_URL;
-const PORT = process.env.PORT;
-// const PORT = 4000;
-// const MONGO_URL = "mongodb://127.0.0.1";
+// const MONGO_URL=process.env.MONGO_URL;
+// const PORT = process.env.PORT;
+const PORT = 4000;
+const MONGO_URL = "mongodb://127.0.0.1";
 
 const client = new MongoClient(MONGO_URL); // dial
 // Top level await
@@ -84,10 +84,11 @@ app.get("/cart", async function (request, response) {
 
 app.get("/cart/:id", async function (request, response) {
   const { id } = request.params;
-  const cart = await client.db("rental").collection("cart").findOne({ id: id });
+  const cart = await client.db("rental").collection("cart").findOne({ _id:new ObjectId(id)});
   cart
     ? response.send(cart)
     : response.status(404).send({ message: "item not found" });
+    console.log(cart);
 });
 
 app.post("/add", express.json(), async function (request, response) {
@@ -101,7 +102,7 @@ app.delete("/cart/:id", async function (request, response) {
   const result = await client
     .db("rental")
     .collection("cart")
-    .deleteOne({ id: id });
+    .deleteOne({_id:new ObjectId(id) });
   result.deletedCount>=1
     ? response.send({message:"item has successfully deleted"})
     : response.status(404).send({ message: "item not found" });
@@ -113,7 +114,7 @@ app.put("/cart/:id", express.json(), async function (request, response) {
   const result = await client
     .db("rental")
     .collection("cart")
-    .updateOne({ id: id }, { $set: data });
+    .updateOne({_id:new ObjectId(id)}, { $set: data });
   response.send(result);
 });
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
