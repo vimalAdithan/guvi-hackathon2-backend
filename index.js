@@ -5,10 +5,10 @@ import express from "express";
 import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 const app = express();
-// const MONGO_URL=process.env.MONGO_URL;
-// const PORT = process.env.PORT;
-const PORT = 4000;
-const MONGO_URL = "mongodb://127.0.0.1";
+const MONGO_URL=process.env.MONGO_URL;
+const PORT = process.env.PORT;
+// const PORT = 4000;
+// const MONGO_URL = "mongodb://127.0.0.1";
 
 const client = new MongoClient(MONGO_URL); // dial
 // Top level await
