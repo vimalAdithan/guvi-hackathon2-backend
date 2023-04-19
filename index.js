@@ -7,6 +7,7 @@ import cors from "cors";
 const app = express();
 const MONGO_URL=process.env.MONGO_URL;
 const PORT = process.env.PORT;
+app.use(cors());
 // const PORT = 4000;
 // const MONGO_URL = "mongodb://127.0.0.1";
 
@@ -15,7 +16,6 @@ const client = new MongoClient(MONGO_URL); // dial
 await client.connect(); // call
 console.log("Mongo is connected !!!  ");
 
-app.use(cors());
 // const cart=[
 //   {
 //     "id": "1",
