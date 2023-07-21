@@ -15,57 +15,7 @@ const client = new MongoClient(MONGO_URL); // dial
 // Top level await
 await client.connect(); // call
 console.log("Mongo is connected !!!  ");
-// app.use((request,response,next)=>{response.header('access-Control-Allow-Origin','*')
-// response.header('access-Control-Allow-Method','*')
-// response.header('access-Control-Allow-Headers','*')
-// next()})
-// const cart=[
-//   {
-//     "id": "1",
-//     "image": "/images/jcb.jpg",
-//     "name": "JCB",
-//     "price": 200,
-//     "status": "false"
-//   },
-//   {
-//     "id": "2",
-//     "image": "/images/ciment mixture.jpg",
-//     "name": "Cement mixture",
-//     "price": 175,
-//     "status": "true"
-//   },
-//   {
-//     "id": "3",
-//     "image": "/images/road_roller.jpg",
-//     "name": "Road roller",
-//     "price": 180,
-//     "status": "false"
-//   },
-//   {
-//     "id": "4",
-//     "image":
-//     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSHKPiMxlEfAcUa_CFhDTjQpsFyxZbL7evWSWBzRmu7uYT6yJ0D0ubI1QxrsSuP5mkaNo&usqp=CAU",
-//     "name": "Road roller",
-//     "price": 180,
-//     "status": "true"
-//   },
-//   {
-//     "id": "5",
-//     "image": "/images/crane.jpg",
-//     "name": "Crane",
-//     "price": 150,
-//     "status": "true"
-//   },
-// ];
 
-// app.get("/", async function (request, response) {
-//   const cart = await client
-//     .db("rental")
-//     .collection("cart")
-//     .find({})
-//     .toArray();
-//   response.send(cart);
-// });
 app.get("/", async function (request, response) {
   const cart = await client.db("rental").collection("cart").find({}).toArray();
   response.send(cart);
@@ -97,11 +47,13 @@ app.get("/cart/:id", async function (request, response) {
 app.post("/add", express.json(), async function (request, response) {
   const data = request.body;
   const result = await client.db("rental").collection("cart").insertMany(data);
-  response.header('access-Control-Allow-Origin','*')
-response.header('access-Control-Allow-Method','*')
-response.header('access-Control-Allow-Headers','*')
   response.send(result);
 });
+
+
+// response.header('access-Control-Allow-Origin','*')
+// response.header('access-Control-Allow-Method','*')
+// response.header('access-Control-Allow-Headers','*')
 
 app.delete("/cart/:id", async function (request, response) {
   const { id } = request.params;
