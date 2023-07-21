@@ -46,7 +46,7 @@ app.get("/cart/:id", async function (request, response) {
 
 app.post("/add", express.json(), async function (request, response) {
   const data = request.body;
-  const result = await client.db("rental").collection("cart").insertMany(data);
+  const result = await client.db("rental").collection("cart").insertOne(data);
   response.send(result);
 });
 
